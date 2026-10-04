@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Robux al mejor precio | Colombia</title>
+<style>
+  :root{
+    --bg:#06100a; --card:#0d1a12; --line:#2a4a35; --green:#3dff7a; --yellow:#f6ff3d; --text:#eefaf1; --muted:#8fb09b;
+  }
+  *{box-sizing:border-box;margin:0}
+  body{background:radial-gradient(circle at 20% 0,#0f3a1d 0,var(--bg) 45%);color:var(--text);font-family:"Trebuchet MS","Segoe UI",sans-serif;min-height:100vh;padding:24px 16px 120px}
+  header{max-width:900px;margin:0 auto 28px;text-align:center}
+  h1{font-size:clamp(2rem,6vw,3.4rem);font-weight:900;font-style:italic;line-height:1.05}
+  h1 span{color:var(--green)}
+  header p{color:var(--muted);margin-top:10px}
+  .grid{max-width:900px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
+  .pack{background:var(--card);border:2px solid var(--line);border-radius:14px;padding:14px;text-align:left;color:inherit;font:inherit;cursor:pointer;transition:border-color .15s,transform .15s}
+  .pack:hover{border-color:var(--green)}
+  .pack:focus-visible{outline:3px solid var(--yellow);outline-offset:2px}
+  .pack b{display:block;font-size:1.25rem}
+  .pack span{display:block;color:var(--green);font-weight:700;margin-top:4px;font-size:1.1rem}
+  .pack[aria-pressed="true"]{background:var(--yellow);border-color:var(--yellow);color:#0a1a0f}
+  .pack[aria-pressed="true"] span{color:#0a1a0f}
+  .bar{position:fixed;left:0;right:0;bottom:0;background:#050c08ee;border-top:2px solid var(--line);padding:12px 16px;backdrop-filter:blur(6px)}
+  .bar div{max-width:900px;margin:0 auto;display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+  #sel{font-size:1.05rem}
+  #sel small{color:var(--muted);display:block}
+  .wa{background:var(--green);color:#04210f;font-weight:900;font-size:1.05rem;padding:12px 22px;border-radius:999px;text-decoration:none;border:0;cursor:pointer}
+  .wa[aria-disabled="true"]{opacity:.4;pointer-events:none}
+  .wa:focus-visible{outline:3px solid var(--yellow);outline-offset:3px}
+  footer{max-width:900px;margin:28px auto 0;color:var(--muted);font-size:.85rem;text-align:center}
+</style>
+</head>
+<body>
+<header>
+  <h1>Compra <span>Robux</span><br>al mejor precio</h1>
+  <p>Elige tu paquete y te atiendo directo por WhatsApp.</p>
+</header>
+
+<main class="grid" id="grid"></main>
+
+<footer>Nunca te pediré tu contraseña de Roblox. Precios en pesos colombianos (COP).</footer>
+
+<div class="bar">
+  <div>
+    <div id="sel">Elige un paquete<small>Toca uno de los paquetes de arriba</small></div>
+    <a class="wa" id="wa" href="#" aria-disabled="true" target="_blank" rel="noopener">Pedir por WhatsApp</a>
+  </div>
+</div>
+
+<script>
+  const NUMERO = "573182138509"; // 57 = Colombia
+  const paquetes = [
+    [50,2617.61],[100,5269.99],[150,6120.65],[200,8039.98],[300,11044.73],[400,14574.71],
+    [500,17323.75],[600,20793.74],[800,27566.48],[1000,33847.50],[1200,40787.48],[1300,44092.23],
+    [1500,50371.25],[1700,57311.23],[2000,66895.00],[2500,83418.75],[2800,93663.48],[3000,99942.50],
+    [3500,116466.25],[4000,132990.00],[4500,149513.75],[5000,166037.50],[7500,248656.25]
+  ];
+  const cop = n => "$" + n.toLocaleString("es-CO",{minimumFractionDigits:2,maximumFractionDigits:2});
+  const grid = document.getElementById("grid"), sel = document.getElementById("sel"), wa = document.getElementById("wa");
+
+  paquetes.forEach(([robux, precio]) => {
+    const b = document.createElement("button");
+    b.className = "pack"; b.type = "button"; b.setAttribute("aria-pressed","false");
+    b.innerHTML = `<b>${robux.toLocaleString("es-CO")} Robux</b><span>${cop(precio)}</span>`;
+    b.onclick = () => {
+      grid.querySelectorAll(".pack").forEach(x => x.setAttribute("aria-pressed","false"));
+      b.setAttribute("aria-pressed","true");
+      sel.innerHTML = `${robux.toLocaleString("es-CO")} Robux por ${cop(precio)}<small>Paquete seleccionado</small>`;
+      const msg = `Hola, quiero comprar el paquete de ${robux} Robux por ${cop(precio)} COP.`;
+      wa.href = `https://wa.me/${NUMERO}?text=${encodeURIComponent(msg)}`;
+      wa.removeAttribute("aria-disabled");
+    };
+    grid.appendChild(b);
+  });
+</script>
+</body>
+</html>
